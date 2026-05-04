@@ -1,160 +1,171 @@
-# 🎮 GameVault
+# 🎮 GameStor – Oyun Platformu (Bitirme Projesi)
 
-GameVault, kullanıcıların oyun ekleyebildiği, yorum yapabildiği ve topluluk etkileşimi sağlayabildiği **Steam benzeri bir web uygulamasıdır**.
-Proje PHP ve MySQL kullanılarak geliştirilmiştir.
+GameStor, kullanıcıların oyun ekleyebildiği, arkadaş ekleyip sohbet edebildiği ve oyun satın alıp kütüphanesinde saklayabildiği **Steam benzeri sosyal bir oyun platformudur**.
 
 ---
 
 ## 🚀 Özellikler
 
-### 👤 Kullanıcı Sistemi
-
-* Kayıt olma ve giriş yapma
-* Profil sayfası
-* Kullanıcı bilgileri görüntüleme
-
 ### 🎮 Oyun Sistemi
 
 * Kullanıcılar oyun ekleyebilir
-* Admin onay sistemi (moderasyon)
+* Admin onay sistemi (onaysız oyunlar görünmez)
 * Oyun detay sayfası
-* Oyun arama ve filtreleme
-
-### 🛠️ Admin Paneli
-
-* Onay bekleyen oyunları görüntüleme
-* Oyun onaylama / reddetme
-* Yönetim yetkileri
-
-### 💬 Yorum Sistemi
-
-* Oyunlara yorum yapma
-* 1-5 arası puanlama
-* Kullanıcı bazlı yorumlar
-
-### 🌐 Topluluk (Forum)
-
-* Forum gönderileri oluşturma
-* Yorum yapma
-* Beğeni sistemi
+* Tür, fiyat ve arama filtreleme
 
 ---
 
-## 🧱 Teknolojiler
+### 👤 Kullanıcı Sistemi
+
+* Kayıt / Giriş sistemi
+* Profil sayfası
+* Profil resmi ve kullanıcı bilgileri
+
+---
+
+### 👥 Arkadaş Sistemi
+
+* Kullanıcı arama
+* Arkadaş isteği gönderme
+* Kabul / reddetme
+* Arkadaş listesi görüntüleme
+
+---
+
+### 💬 Chat Sistemi
+
+* Kullanıcılar arasında mesajlaşma
+* AJAX ile otomatik mesaj yenileme
+* Okunmamış mesaj sistemi
+
+---
+
+### 🔔 Bildirim Sistemi
+
+* Navbar’da:
+
+  * 🔔 Arkadaş istekleri
+  * 💬 Okunmamış mesaj sayısı
+* Bildirim dropdown sistemi
+
+---
+
+### 🟢 Online / Offline Sistemi
+
+* Kullanıcı aktifliği takip edilir (`last_active`)
+* Online / Offline durum gösterimi
+
+---
+
+### 🛒 Satın Alma Sistemi
+
+* Oyun satın alma
+* Kullanıcıya özel kütüphane
+* Satın alınan oyunların listelenmesi
+
+---
+
+### 🎮 Kütüphane Sistemi
+
+* Kullanıcının satın aldığı oyunları görüntüleme
+
+---
+
+### 🔍 Filtreleme & Arama
+
+* Oyun adına göre arama
+* Tür filtresi
+* Fiyat aralığı filtresi
+
+---
+
+## 🛠️ Kullanılan Teknolojiler
 
 * **Backend:** PHP (PDO)
 * **Veritabanı:** MySQL
 * **Frontend:** HTML, CSS, Bootstrap 5
-* **Diğer:** Font Awesome
+* **JavaScript:** AJAX (fetch API)
+* **Server:** XAMPP
+
+---
+
+## 🧱 Veritabanı Yapısı
+
+### Ana Tablolar:
+
+* `users` → kullanıcılar
+* `games` → oyunlar
+* `friends` → arkadaş ilişkileri
+* `messages` → mesajlar
+* `library` → satın alınan oyunlar
 
 ---
 
 ## ⚙️ Kurulum
 
-### 1. XAMPP Kur
+1. XAMPP başlat (Apache + MySQL)
+2. `htdocs` içine projeyi koy:
 
-* Apache ve MySQL’i başlat
+   ```
+   C:\xampp\htdocs\gamestore
+   ```
+3. phpMyAdmin aç:
 
-### 2. Projeyi Yerleştir
+   ```
+   http://localhost/phpmyadmin
+   ```
+4. Yeni veritabanı oluştur:
 
-```bash
-C:\xampp\htdocs\gamestore
-```
+   ```
+   gamestore
+   ```
+5. SQL tablolarını import et
+6. Tarayıcıdan aç:
 
-### 3. Veritabanı Oluştur
-
-phpMyAdmin → yeni veritabanı:
-
-```sql
-gamestore
-```
-
-### 4. Tabloları Kur
-
-SQL sekmesinde gerekli tabloları çalıştır
-
----
-
-### 5. config.php Ayarla
-
-```php
-$this->db = new PDO("mysql:host=localhost;dbname=gamestore;charset=utf8", "root", "");
-```
+   ```
+   http://localhost/gamestore
+   ```
 
 ---
 
-### 6. Siteyi Çalıştır
-
-```bash
-http://localhost/gamestore
-```
-
----
-
-## 🔐 Admin Girişi
+## 🔑 Admin Girişi
 
 Varsayılan admin:
 
-* Kullanıcı adı: **admin**
-* Şifre: **123456**
+* Kullanıcı adı: `admin`
+* Şifre: `123456`
 
 ---
 
-## 🔄 Sistem Nasıl Çalışır?
+## 📌 Proje Amacı
 
-1. Kullanıcı oyun ekler
-2. Oyun → **pending** durumuna düşer
-3. Admin panelde görünür
-4. Admin onaylarsa → **approved** olur
-5. Sadece onaylı oyunlar ana sayfada görünür
+Bu proje, modern web uygulamalarında:
 
----
+* Veritabanı yönetimi
+* Kullanıcı etkileşimi
+* Gerçek zamanlıya yakın sistemler
+* Sosyal özellikler
 
-## 📂 Proje Yapısı
-
-```
-gamestore/
-│
-├── includes/
-│   ├── header.php
-│   ├── footer.php
-│
-├── config.php
-├── index.php
-├── add_game.php
-├── game_details.php
-├── admin_games.php
-├── login.php
-├── register.php
-├── profile.php
-```
+gibi konuları uygulamalı olarak öğrenmek amacıyla geliştirilmiştir.
 
 ---
 
-## 🔒 Güvenlik
+## 🚀 Gelecek Geliştirmeler
 
-* PDO Prepared Statements kullanıldı
-* SQL Injection önlemleri alındı
-* Şifreler hashlenerek saklanır
-
----
-
-## 🚀 Geliştirilebilir Özellikler
-
-* 🛒 Sepet & satın alma sistemi
-* ❤️ Favorilere ekleme
-* 🔔 Bildirim sistemi
-* 🎮 Oyun kategorileri
-* 🧠 Yapay zeka öneri sistemi
+* 🕒 Son görülme (last seen)
+* ✔️ Mesaj görüldü sistemi
+* 💬 Yazıyor (typing) özelliği
+* ⭐ Oyun puanlama sistemi
+* 🟢 Gerçek zamanlı (WebSocket) chat
 
 ---
 
 ## 👨‍💻 Geliştirici
 
-Bu proje eğitim amaçlı geliştirilmiştir.
+**Hüseyin Utku Kocahüyük**
 
 ---
 
-## ⭐ Lisans
+## 📄 Lisans
 
-Bu proje açık kaynaklıdır ve eğitim amaçlı kullanılabilir.
+Bu proje eğitim amaçlı geliştirilmiştir.
