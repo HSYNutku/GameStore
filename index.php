@@ -8,37 +8,39 @@ $error = '';
 
 try {
 
-    // 🔥 SADECE ONAYLI OYUNLAR
-    $query = "SELECT * FROM games WHERE status = 'approved'";
+    $query = "
+    SELECT g.*, u.username
+    FROM games g
+    LEFT JOIN users u ON g.added_by = u.id
+    WHERE g.status = 'approved'
+    ";
+
     $params = [];
 
-    // 🔍 Arama
     if (!empty($_GET['search'])) {
-        $query .= " AND name LIKE ?";
+        $query .= " AND g.name LIKE ?";
         $params[] = "%" . $_GET['search'] . "%";
     }
 
-    // 🎮 Tür filtre
     if (!empty($_GET['genre'])) {
-        $query .= " AND genre = ?";
+        $query .= " AND g.genre = ?";
         $params[] = $_GET['genre'];
     }
 
-    // 💰 Fiyat filtre
     if (!empty($_GET['price_range'])) {
         list($min, $max) = explode('-', $_GET['price_range']);
 
         if ($max == '+') {
-            $query .= " AND price >= ?";
+            $query .= " AND g.price >= ?";
             $params[] = $min;
         } else {
-            $query .= " AND price BETWEEN ? AND ?";
+            $query .= " AND g.price BETWEEN ? AND ?";
             $params[] = $min;
             $params[] = $max;
         }
     }
 
-    $query .= " ORDER BY name";
+    $query .= " ORDER BY g.name";
 
     $stmt = $db->prepare($query);
     $stmt->execute($params);
@@ -55,88 +57,96 @@ include 'includes/header.php';
 
 <div class="container mt-4">
 
-    <!-- 🔍 FİLTRE -->
-    <div class="card mb-4">
-        <div class="card-body">
-            <form method="GET" class="row g-3">
+<div class="card mb-4">
+<div class="card-body">
+<form method="GET" class="row g-3">
 
-                <div class="col-md-4">
-                    <input type="text" name="search" class="form-control"
-                        placeholder="Oyun ara..."
-                        value="<?= $_GET['search'] ?? '' ?>">
-                </div>
+<div class="col-md-4">
+<input type="text" name="search" class="form-control"
+placeholder="Oyun ara..."
+value="<?= $_GET['search'] ?? '' ?>">
+</div>
 
-                <div class="col-md-3">
-                    <select name="genre" class="form-select">
-                        <option value="">Tüm Türler</option>
-                        <?php
-                        $genres = $db->query("SELECT DISTINCT genre FROM games WHERE status='approved'")->fetchAll(PDO::FETCH_COLUMN);
-                        foreach ($genres as $genre):
-                        ?>
-                        <option value="<?= $genre ?>" <?= (($_GET['genre'] ?? '') == $genre ? 'selected' : '') ?>>
-                            <?= $genre ?>
-                        </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+<div class="col-md-3">
+<select name="genre" class="form-select">
+<option value="">Tüm Türler</option>
+<?php
+$genres = $db->query("SELECT DISTINCT genre FROM games WHERE status='approved'")
+->fetchAll(PDO::FETCH_COLUMN);
 
-                <div class="col-md-3">
-                    <select name="price_range" class="form-select">
-                        <option value="">Tüm fiyatlar</option>
-                        <option value="0-50">0-50</option>
-                        <option value="50-100">50-100</option>
-                        <option value="100-200">100-200</option>
-                        <option value="200+">200+</option>
-                    </select>
-                </div>
+foreach ($genres as $genre):
+?>
+<option value="<?= $genre ?>" <?= (($_GET['genre'] ?? '') == $genre ? 'selected' : '') ?>>
+<?= $genre ?>
+</option>
+<?php endforeach; ?>
+</select>
+</div>
 
-                <div class="col-md-2">
-                    <button class="btn btn-primary w-100">Filtrele</button>
-                </div>
+<div class="col-md-3">
+<select name="price_range" class="form-select">
+<option value="">Tüm fiyatlar</option>
+<option value="0-50">0-50</option>
+<option value="50-100">50-100</option>
+<option value="100-200">100-200</option>
+<option value="200+">200+</option>
+</select>
+</div>
 
-            </form>
-        </div>
-    </div>
+<div class="col-md-2">
+<button class="btn btn-primary w-100">Filtrele</button>
+</div>
 
-    <!-- 🎮 OYUNLAR -->
-    <h2>Oyunlar</h2>
+</form>
+</div>
+</div>
 
-    <?php if ($error): ?>
-        <div class="alert alert-danger"><?= $error ?></div>
-    <?php endif; ?>
+<h2>Oyunlar</h2>
 
-    <div class="row row-cols-1 row-cols-md-3 g-4">
+<?php if ($error): ?>
+<div class="alert alert-danger"><?= $error ?></div>
+<?php endif; ?>
 
-        <?php foreach ($games as $game): ?>
-        <div class="col">
-            <div class="card h-100">
+<div class="row row-cols-1 row-cols-md-3 g-4">
 
-                <?php if (!empty($game['image_url'])): ?>
-                <img src="<?= $game['image_url'] ?>" class="card-img-top">
-                <?php endif; ?>
+<?php foreach ($games as $game): ?>
 
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <a href="game_details.php?id=<?= $game['id'] ?>">
-                            <?= htmlspecialchars($game['name']) ?>
-                        </a>
-                    </h5>
+<div class="col">
+<div class="card h-100">
 
-                    <p>
-                        Tür: <?= $game['genre'] ?><br>
-                        Fiyat: $<?= $game['price'] ?>
-                    </p>
+<?php if (!empty($game['image_url'])): ?>
+<img src="<?= $game['image_url'] ?>" class="card-img-top">
+<?php endif; ?>
 
-                    <a href="game_details.php?id=<?= $game['id'] ?>" class="btn btn-primary btn-sm">
-                        Detay
-                    </a>
-                </div>
+<div class="card-body">
 
-            </div>
-        </div>
-        <?php endforeach; ?>
+<h5 class="card-title">
+<a href="game_details.php?id=<?= $game['id'] ?>">
+<?= htmlspecialchars($game['name']) ?>
+</a>
+</h5>
 
-    </div>
+<p>
+Tür: <?= htmlspecialchars($game['genre']) ?><br>
+Fiyat: $<?= htmlspecialchars($game['price']) ?>
+</p>
+
+<p class="small text-muted">
+Ekleyen: <?= htmlspecialchars($game['username'] ?? 'Bilinmiyor') ?>
+</p>
+
+<a href="game_details.php?id=<?= $game['id'] ?>" class="btn btn-primary btn-sm">
+Detay
+</a>
+
+</div>
+
+</div>
+</div>
+
+<?php endforeach; ?>
+
+</div>
 
 </div>
 
