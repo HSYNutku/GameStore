@@ -1,6 +1,7 @@
-# 🎮 GameStor – Oyun Platformu (Bitirme Projesi)
+# 🎮 GameStore
 
-GameStor, kullanıcıların oyun ekleyebildiği, arkadaş ekleyip sohbet edebildiği ve oyun satın alıp kütüphanesinde saklayabildiği **Steam benzeri sosyal bir oyun platformudur**.
+GameStore, kullanıcıların oyun ekleyebildiği, satın alabildiği, arkadaş ekleyebildiği ve mesajlaşabildiği bir mini dijital oyun platformudur.
+(Proje Steam benzeri bir sistem mantığında geliştirilmiştir.)
 
 ---
 
@@ -9,17 +10,26 @@ GameStor, kullanıcıların oyun ekleyebildiği, arkadaş ekleyip sohbet edebild
 ### 🎮 Oyun Sistemi
 
 * Kullanıcılar oyun ekleyebilir
-* Admin onay sistemi (onaysız oyunlar görünmez)
+* Admin onay sistemi (pending / approved)
+* Onaylanmamış oyunlar mağazada görünmez
 * Oyun detay sayfası
-* Tür, fiyat ve arama filtreleme
 
 ---
 
-### 👤 Kullanıcı Sistemi
+### 🛒 Sepet & Satın Alma
 
-* Kayıt / Giriş sistemi
-* Profil sayfası
-* Profil resmi ve kullanıcı bilgileri
+* Sepete oyun ekleme
+* Aynı oyunu sepete tekrar ekleme engeli
+* Sipariş sistemi (`orders`, `order_items`)
+* Satın alınan oyunlar otomatik olarak kütüphaneye eklenir
+* Aynı oyun tekrar satın alınamaz
+
+---
+
+### 🎮 Kütüphane Sistemi
+
+* Kullanıcının satın aldığı oyunlar listelenir
+* Kullanıcıya özel içerik
 
 ---
 
@@ -28,50 +38,41 @@ GameStor, kullanıcıların oyun ekleyebildiği, arkadaş ekleyip sohbet edebild
 * Kullanıcı arama
 * Arkadaş isteği gönderme
 * Kabul / reddetme
-* Arkadaş listesi görüntüleme
+* Arkadaş listesi
 
 ---
 
-### 💬 Chat Sistemi
+### 💬 Mesaj Sistemi
 
-* Kullanıcılar arasında mesajlaşma
-* AJAX ile otomatik mesaj yenileme
-* Okunmamış mesaj sistemi
+* Kullanıcılar arası mesajlaşma
+* Okunmamış mesaj sayacı
+* AJAX ile otomatik yenileme
 
 ---
 
 ### 🔔 Bildirim Sistemi
 
-* Navbar’da:
-
-  * 🔔 Arkadaş istekleri
-  * 💬 Okunmamış mesaj sayısı
-* Bildirim dropdown sistemi
+* Arkadaş istekleri
+* Navbar üzerinde bildirim badge
+* Dropdown bildirim paneli
 
 ---
 
 ### 🟢 Online / Offline Sistemi
 
-* Kullanıcı aktifliği takip edilir (`last_active`)
-* Online / Offline durum gösterimi
+* `last_active` ile kullanıcı takibi
+* Online / offline durumu
 
 ---
 
-### 🛒 Satın Alma Sistemi
+### ⭐ Yorum & Puanlama
 
-* Oyun satın alma
-* Kullanıcıya özel kütüphane
-* Satın alınan oyunların listelenmesi
-
----
-
-### 🎮 Kütüphane Sistemi
-
-* Kullanıcının satın aldığı oyunları görüntüleme
+* Oyunlara yorum yapma
+* 1–5 arası puanlama sistemi
 
 ---
 
-### 🔍 Filtreleme & Arama
+### 🔍 Arama & Filtreleme
 
 * Oyun adına göre arama
 * Tür filtresi
@@ -81,30 +82,33 @@ GameStor, kullanıcıların oyun ekleyebildiği, arkadaş ekleyip sohbet edebild
 
 ## 🛠️ Kullanılan Teknolojiler
 
-* **Backend:** PHP (PDO)
-* **Veritabanı:** MySQL
+* **Backend:** PHP (Core PHP)
+* **Veritabanı:** MySQL / MariaDB
+* **Database Access:** PDO (Prepared Statements)
 * **Frontend:** HTML, CSS, Bootstrap 5
 * **JavaScript:** AJAX (fetch API)
 * **Server:** XAMPP
 
 ---
 
-## 🧱 Veritabanı Yapısı
-
-### Ana Tablolar:
+## 📂 Veritabanı Tabloları
 
 * `users` → kullanıcılar
 * `games` → oyunlar
-* `friends` → arkadaş ilişkileri
-* `messages` → mesajlar
+* `cart` → sepet
+* `orders` → siparişler
+* `order_items` → sipariş detayları
 * `library` → satın alınan oyunlar
+* `friends` → arkadaş sistemi
+* `messages` → mesajlar
+* `comments` → yorumlar
 
 ---
 
 ## ⚙️ Kurulum
 
 1. XAMPP başlat (Apache + MySQL)
-2. `htdocs` içine projeyi koy:
+2. Projeyi `htdocs` klasörüne at:
 
    ```
    C:\xampp\htdocs\gamestore
@@ -128,9 +132,9 @@ GameStor, kullanıcıların oyun ekleyebildiği, arkadaş ekleyip sohbet edebild
 
 ---
 
-## 🔑 Admin Girişi
+## 🔑 Demo Giriş
 
-Varsayılan admin:
+Admin hesabı:
 
 * Kullanıcı adı: `admin`
 * Şifre: `123456`
@@ -139,14 +143,14 @@ Varsayılan admin:
 
 ## 📌 Proje Amacı
 
-Bu proje, modern web uygulamalarında:
+Bu proje;
 
 * Veritabanı yönetimi
 * Kullanıcı etkileşimi
-* Gerçek zamanlıya yakın sistemler
-* Sosyal özellikler
+* Sosyal sistemler
+* E-ticaret mantığı
 
-gibi konuları uygulamalı olarak öğrenmek amacıyla geliştirilmiştir.
+gibi konuları uygulamalı olarak geliştirmek amacıyla yapılmıştır.
 
 ---
 
@@ -154,9 +158,10 @@ gibi konuları uygulamalı olarak öğrenmek amacıyla geliştirilmiştir.
 
 * 🕒 Son görülme (last seen)
 * ✔️ Mesaj görüldü sistemi
-* 💬 Yazıyor (typing) özelliği
-* ⭐ Oyun puanlama sistemi
-* 🟢 Gerçek zamanlı (WebSocket) chat
+* 💬 Yazıyor (typing)
+* ⭐ Oyun puan ortalaması
+* 🛒 Gelişmiş sepet sistemi
+* 💳 Ödeme simülasyonu
 
 ---
 
