@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="text-center">GameVault'a Kayıt Ol</h3>
+                        <h3 class="text-center">GameStore'a Kayıt Ol</h3>
                     </div>
                     <div class="card-body">
                         <?php if ($error): ?>
