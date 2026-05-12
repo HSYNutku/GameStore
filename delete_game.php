@@ -11,21 +11,38 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $game_id = (int)$_GET['id'];
 
 try {
+
     $db = Database::getInstance()->getConnection();
-    
-    // Önce oyunun var olduğunu kontrol et
-    $stmt = $db->prepare("SELECT id FROM games WHERE id = ?");
+
+    // 🎮 OYUN VAR MI?
+    $stmt = $db->prepare("
+        SELECT id 
+        FROM games 
+        WHERE id = ?
+    ");
+
     $stmt->execute([$game_id]);
-    
+
     if ($stmt->fetch()) {
-        // Oyunu sil
-        $stmt = $db->prepare("DELETE FROM games WHERE id = ?");
+
+        // ❌ DELETE YOK
+        // ✅ SADECE MAĞAZADAN KALDIR
+
+        $stmt = $db->prepare("
+            UPDATE games
+            SET status = 'removed'
+            WHERE id = ?
+        ");
+
         $stmt->execute([$game_id]);
     }
-    
-    header('Location: index.php');
+
+    header('Location: admin_games.php');
     exit();
+
 } catch(PDOException $e) {
-    die('Oyun silinirken bir hata oluştu.');
+
+    die('Oyun kaldırılırken bir hata oluştu.');
+
 }
-?> 
+?>
